@@ -68,10 +68,7 @@ Play.prototype = {
     this.shift = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT = 16);
   },
   update: function() {
-    if (this.shift.isDown) {
-      console.log("Test");
-      this.damageLife();
-    };
+      
 
     //calls the checkcollisions function 
     this.checkCollisions();
@@ -94,6 +91,22 @@ Play.prototype = {
         this.player.animations.play('run');
       };
     };
+
+    console.log(this.player.alive);
+    console.log(this.player.y);
+    // if (this.player.body.coll) {
+    //   this.player.kill();
+    // }
+
+    if(this.player.y > 520) {
+      console.log("player dead");
+      this.damageLife();
+      this.damageLife();
+      this.damageLife();
+      this.player.kill();
+      this.gameOver();
+    }
+
   },
   //collision between elements
   checkCollisions: function(){
@@ -108,7 +121,6 @@ Play.prototype = {
     //lets player collect beers, kegs
     this.game.physics.arcade.overlap(this.player, this.beers, this.collectBeer, null, this);
     this.game.physics.arcade.overlap(this.player, this.kegs, this.collectKegs, null, this);
-
   },
   //generates grounds with random y-value(height)
   generateGrounds: function() {  
@@ -154,7 +166,7 @@ Play.prototype = {
     this.lives.add(life);
   },
   damageLife: function(){
-    this.lives.children.destroy();
+    this.lives.children.pop();
   },
   //
   killDude: function(player){
