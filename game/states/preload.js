@@ -19,6 +19,7 @@ Preload.prototype = {
     this.load.image('ground', 'assets/platform.png');
     this.load.image('beer', 'assets/beer.png');
     this.load.image('keg', 'assets/keg.png');
+    this.load.image('whiskey', 'assets/whiskey.png');
     this.load.image('heart', 'assets/heart.png');
     this.load.image('pause-btn', 'assets/pause-btn.png');
     this.load.image('pausePanel', 'assets/pausePanel.png');
@@ -28,10 +29,12 @@ Preload.prototype = {
 
     //spritesheets for the game
     this.load.spritesheet('dude', 'assets/dude.png', 45, 62);
-    this.load.spritesheet('baddie', 'assets/baddie.png', 32, 32);
+    this.load.spritesheet('bunny', 'assets/baddie.png', 32, 32);
+    this.load.spritesheet('cop', 'assets/cop.png', 28, 65);
 
     //sounds for the game
     this.load.audio('dudeJump', 'assets/audio/jump_07.wav');
+    this.load.audio('explode', 'assets/audio/explosion.wav');
   },
   create: function() {
     this.asset.cropEnabled = false;

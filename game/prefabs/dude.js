@@ -16,6 +16,7 @@ var Dude = function(game, x, y, frame) {
   //dude animation frames
   this.animations.add('jump', [1], 10, true );
   this.animations.add('run', [0, 1, 2, 3], 8, true);
+  this.animations.add('dead', [4, 5, 6], 10, false);
 
   this.lives = 3;
 
