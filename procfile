@@ -1,1 +1,1 @@
-web: node game/main.js
+web: node Gruntfile.js
