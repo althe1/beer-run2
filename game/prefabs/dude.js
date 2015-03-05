@@ -10,7 +10,8 @@ var Dude = function(game, x, y, frame) {
   this.body.gravity.y = 720;
   this.body.velocity.x = 400;
   this.body.collideWorldBounds = false;
-  this.outofBoundsKill = true;
+  this.checkWorldBounds = true;
+  this.outOfBoundsKill = true;
 
   //dude animation frames
   this.animations.add('jump', [1], 10, true );
@@ -30,4 +31,5 @@ Dude.prototype.jump = function(){
 }
 
 module.exports = Dude;
+
 

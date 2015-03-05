@@ -15,7 +15,7 @@ window.onload = function () {
 
   game.state.start('boot');
 };
-},{"./states/boot":8,"./states/gameover":9,"./states/menu":10,"./states/play":11,"./states/preload":12}],2:[function(require,module,exports){
+},{"./states/boot":9,"./states/gameover":10,"./states/menu":11,"./states/play":12,"./states/preload":13}],2:[function(require,module,exports){
 'use strict';
 
 var Beer = function(game, x, y, frame) {
@@ -50,7 +50,8 @@ var Dude = function(game, x, y, frame) {
   this.body.gravity.y = 720;
   this.body.velocity.x = 400;
   this.body.collideWorldBounds = false;
-  this.outofBoundsKill = true;
+  this.checkWorldBounds = true;
+  this.outOfBoundsKill = true;
 
   //dude animation frames
   this.animations.add('jump', [1], 10, true );
@@ -72,7 +73,47 @@ Dude.prototype.jump = function(){
 module.exports = Dude;
 
 
+
 },{}],4:[function(require,module,exports){
+'use strict';
+
+var GameOverPanel = function(game, parent) {
+  Phaser.Group.call(this, game, parent);
+
+  // Add panel
+  this.panel = this.game.add.sprite(0, 0, 'gameOverPanel');
+  this.panel.width = 400;
+  this.panel.height = 170;
+  this.add(this.panel);
+
+  this.y = 50;
+  this.x = 400;
+  this.alpha = 0; 
+};
+
+GameOverPanel.prototype = Object.create(Phaser.Group.prototype);
+GameOverPanel.prototype.constructor = GameOverPanel;
+// GameOverPanel.prototype.update = function() {
+// };
+//show the game over panel when paused
+GameOverPanel.prototype.show = function(){
+  // this.game.add.tween(this).to({alpha: 1.0, y:150}, 800, Phaser.Easing.Exponential.In, true, 0);
+  this.game.add.tween(this).to({alpha: 1, y:110}, 50, Phaser.Easing.Bounce.Out, true);
+  this.game.add.text(450, 150, 'SCORE', { fontSize: '500px', fill: '#ffa800' });
+  this.playAgain = this.game.add.button(25, 95, 'restart-btn', this.restartGame, this);
+  this.playAgain.anchor.setTo(0, 0);
+  this.add(this.playAgain);
+};
+
+//callback function, when activated starts the play state
+GameOverPanel.prototype.restartGame = function() {  
+  this.game.state.start('play');
+  // this.game.state.initGame();
+};
+
+module.exports = GameOverPanel;
+  
+},{}],5:[function(require,module,exports){
 'use strict';
 
 var Ground = function(game, x, y, frame) {
@@ -108,7 +149,7 @@ Ground.prototype.reset = function(x, y) {
 
 module.exports = Ground;
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 var Heart = function(game, x, y, frame) {
@@ -126,7 +167,7 @@ Heart.prototype.update = function() {
 
 module.exports = Heart;
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 var Keg = function(game, x, y, frame) {
@@ -148,7 +189,7 @@ Keg.prototype.update = function() {
 
 module.exports = Keg;
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 var PausePanel = function(game, parent) {
@@ -186,7 +227,7 @@ PausePanel.prototype.unpause = function(){
 
 module.exports = PausePanel;
   
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 
 'use strict';
 
@@ -206,7 +247,7 @@ Boot.prototype = {
 
 module.exports = Boot;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 
 'use strict';
 function GameOver() {}
@@ -234,7 +275,7 @@ GameOver.prototype = {
 };
 module.exports = GameOver;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 
 'use strict';
 function Menu() {}
@@ -274,7 +315,7 @@ Menu.prototype = {
 
 module.exports = Menu;
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 var Dude = require('../prefabs/dude');
@@ -282,6 +323,7 @@ var Ground = require('../prefabs/ground');
 var Beer = require('../prefabs/beer');
 var Keg = require('../prefabs/keg');
 var PausePanel = require('../prefabs/pausePanel');
+var GameOverPanel = require('../prefabs/gameOverPanel');
 var Heart = require('../prefabs/heart');
 var paused = false;
 
@@ -309,6 +351,9 @@ Play.prototype = {
     this.player = new Dude(this.game, 500, 0)
     this.game.add.existing(this.player);
 
+    //score
+    this.score = 0;
+
     //beer 
     this.beers = this.game.add.group();
 
@@ -317,6 +362,7 @@ Play.prototype = {
 
     //game controls
     this.jumpKey = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.shift = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT = 16);
     // this.pauseKey = this.game.input.keyboard.addKey(32);
 
     // makes spacebar not scroll down 
@@ -331,18 +377,18 @@ Play.prototype = {
     this.pausePanel = new PausePanel(this.game);
     this.game.add.existing(this.pausePanel);
 
+    //game over panel
+    this.gameOverPanel = new GameOverPanel(this.game);
+    this.game.add.existing(this.gameOverPanel)
+
     //player lives
     this.lives = this.game.add.group();
-
-    console.log(this.lives);
 
     this.generateLife(0);
     this.generateLife(44);
     this.generateLife(88);
 
     this.initGame();
-
-    this.shift = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT = 16);
   },
   update: function() {
       
@@ -367,29 +413,41 @@ Play.prototype = {
       else{
         this.player.animations.play('run');
       };
+
+      if(!this.player.alive) {
+        this.damageLife();
+        this.damageLife();
+        this.damageLife();
+        this.gameOver();
+      };
     };
 
     console.log(this.player.alive);
-    console.log(this.player.y);
     // if (this.player.body.coll) {
     //   this.player.kill();
     // }
 
-    if(this.player.y > 520) {
-      console.log("player dead");
-      this.damageLife();
-      this.damageLife();
-      this.damageLife();
-      this.player.kill();
-      this.gameOver();
-    }
+
+    // if(this.player.y > 520 && this.player.y < 530) {
+    //   console.log("player dead");
+    //   this.damageLife();
+    //   this.damageLife();
+    //   this.damageLife();
+    //   this.player.kill();
+    //   this.gameOver();
+    // }
 
   },
+
   //collision between elements
   checkCollisions: function(){
     //lets player run on the first ground
     this.game.physics.arcade.collide(this.player, this.initial_ground);
     this.game.physics.arcade.collide(this.beers, this.initial_ground);
+
+    // this.beers.forEach(function(beers){
+    //   this.addScore(beers);
+    // }, this);
 
     //lets player run on the random generated ground
     this.game.physics.arcade.collide(this.player, this.groundGroup);
@@ -541,14 +599,20 @@ Play.prototype = {
       this.game.add.tween(this.btnPause).to({alpha:1}, 1000, Phaser.Easing.Exponential.In, true);
     };//else do nothing
   },
+  addScore: function(input) {  
+    if(input.exists && !input.hasScored) {
+        input.hasScored = true;
+        this.score++;
+        this.scoreText.setText(this.score.toString());
+    }
+  },
   gameOver: function(){
     console.log('game over!');
     // Gamover
     this.gameover = true;
     // Pause game
-    this.pauseGame();
     // Show gameover panel
-    this.gameoverPanel.show(this.score);
+    this.gameOverPanel.show();
   }
 
 };
@@ -556,7 +620,7 @@ Play.prototype = {
 module.exports = Play;
 
 
-},{"../prefabs/beer":2,"../prefabs/dude":3,"../prefabs/ground":4,"../prefabs/heart":5,"../prefabs/keg":6,"../prefabs/pausePanel":7}],12:[function(require,module,exports){
+},{"../prefabs/beer":2,"../prefabs/dude":3,"../prefabs/gameOverPanel":4,"../prefabs/ground":5,"../prefabs/heart":6,"../prefabs/keg":7,"../prefabs/pausePanel":8}],13:[function(require,module,exports){
 
 'use strict';
 function Preload() {
@@ -581,7 +645,9 @@ Preload.prototype = {
     this.load.image('heart', 'assets/heart.png');
     this.load.image('pause-btn', 'assets/pause-btn.png');
     this.load.image('pausePanel', 'assets/pausePanel.png');
+    this.load.image('gameOverPanel', 'assets/panelGray.png');
     this.load.image('play-btn', 'assets/play-btn.png');
+    this.load.image('restart-btn', 'assets/playagain.png');
 
     //spritesheets for the game
     this.load.spritesheet('dude', 'assets/dude.png', 45, 62);
