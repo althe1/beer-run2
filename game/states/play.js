@@ -5,6 +5,7 @@ var Ground = require('../prefabs/ground');
 var Beer = require('../prefabs/beer');
 var Keg = require('../prefabs/keg');
 var PausePanel = require('../prefabs/pausePanel');
+var GameOverPanel = require('../prefabs/gameOverPanel');
 var Heart = require('../prefabs/heart');
 var paused = false;
 
@@ -32,6 +33,9 @@ Play.prototype = {
     this.player = new Dude(this.game, 500, 0)
     this.game.add.existing(this.player);
 
+    //score
+    this.score = 0;
+
     //beer 
     this.beers = this.game.add.group();
 
@@ -40,6 +44,7 @@ Play.prototype = {
 
     //game controls
     this.jumpKey = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.shift = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT = 16);
     // this.pauseKey = this.game.input.keyboard.addKey(32);
 
     // makes spacebar not scroll down 
@@ -54,18 +59,18 @@ Play.prototype = {
     this.pausePanel = new PausePanel(this.game);
     this.game.add.existing(this.pausePanel);
 
+    //game over panel
+    this.gameOverPanel = new GameOverPanel(this.game);
+    this.game.add.existing(this.gameOverPanel)
+
     //player lives
     this.lives = this.game.add.group();
-
-    console.log(this.lives);
 
     this.generateLife(0);
     this.generateLife(44);
     this.generateLife(88);
 
     this.initGame();
-
-    this.shift = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT = 16);
   },
   update: function() {
       
@@ -90,29 +95,41 @@ Play.prototype = {
       else{
         this.player.animations.play('run');
       };
+
+      if(!this.player.alive) {
+        this.damageLife();
+        this.damageLife();
+        this.damageLife();
+        this.gameOver();
+      };
     };
 
     console.log(this.player.alive);
-    console.log(this.player.y);
     // if (this.player.body.coll) {
     //   this.player.kill();
     // }
 
-    if(this.player.y > 520) {
-      console.log("player dead");
-      this.damageLife();
-      this.damageLife();
-      this.damageLife();
-      this.player.kill();
-      this.gameOver();
-    }
+
+    // if(this.player.y > 520 && this.player.y < 530) {
+    //   console.log("player dead");
+    //   this.damageLife();
+    //   this.damageLife();
+    //   this.damageLife();
+    //   this.player.kill();
+    //   this.gameOver();
+    // }
 
   },
+
   //collision between elements
   checkCollisions: function(){
     //lets player run on the first ground
     this.game.physics.arcade.collide(this.player, this.initial_ground);
     this.game.physics.arcade.collide(this.beers, this.initial_ground);
+
+    // this.beers.forEach(function(beers){
+    //   this.addScore(beers);
+    // }, this);
 
     //lets player run on the random generated ground
     this.game.physics.arcade.collide(this.player, this.groundGroup);
@@ -264,14 +281,20 @@ Play.prototype = {
       this.game.add.tween(this.btnPause).to({alpha:1}, 1000, Phaser.Easing.Exponential.In, true);
     };//else do nothing
   },
+  addScore: function(input) {  
+    if(input.exists && !input.hasScored) {
+        input.hasScored = true;
+        this.score++;
+        this.scoreText.setText(this.score.toString());
+    }
+  },
   gameOver: function(){
     console.log('game over!');
     // Gamover
     this.gameover = true;
     // Pause game
-    this.pauseGame();
     // Show gameover panel
-    this.gameoverPanel.show(this.score);
+    this.gameOverPanel.show();
   }
 
 };

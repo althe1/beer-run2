@@ -22,7 +22,9 @@ Preload.prototype = {
     this.load.image('heart', 'assets/heart.png');
     this.load.image('pause-btn', 'assets/pause-btn.png');
     this.load.image('pausePanel', 'assets/pausePanel.png');
+    this.load.image('gameOverPanel', 'assets/panelGray.png');
     this.load.image('play-btn', 'assets/play-btn.png');
+    this.load.image('restart-btn', 'assets/playagain.png');
 
     //spritesheets for the game
     this.load.spritesheet('dude', 'assets/dude.png', 45, 62);
