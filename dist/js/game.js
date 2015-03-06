@@ -416,7 +416,9 @@ var PausePanel = require('../prefabs/pausePanel');
 var GameOverPanel = require('../prefabs/gameOverPanel');
 var Heart = require('../prefabs/heart');
 var paused = false;
-var deadchecker = true;
+var deadchecker = true; 
+var scoreText;
+
 
 function Play() {}
 Play.prototype = {
@@ -450,6 +452,7 @@ Play.prototype = {
 
     //score
     this.score = 0;
+    this.scoreText = this.game.add.text(15, 15, 'Score: 0', {fontSize: '32px', fill: '#000'});
 
     //beer 
     this.beers = this.game.add.group();
@@ -463,6 +466,7 @@ Play.prototype = {
     //game controls
     this.jumpKey = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     this.shift = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT = 16);
+    this.touch = this.game.input.pointer1;
     // this.pauseKey = this.game.input.keyboard.addKey(32);
 
     // makes spacebar not scroll down 
@@ -484,9 +488,9 @@ Play.prototype = {
     //player lives
     this.lives = this.game.add.group();
 
-    this.generateLife(0);
-    this.generateLife(44);
-    this.generateLife(88);
+    this.generateLife(14);
+    // this.generateLife(44);
+    // this.generateLife(88);
 
     this.initGame();
   },
@@ -501,7 +505,7 @@ Play.prototype = {
       //player speed
       this.player.body.velocity.x = 400;
 
-      if (this.jumpKey.isDown && this.player.body.touching.down && this.player.alive)
+      if (this.touch.isDown || this.jumpKey.isDown && this.player.body.touching.down && this.player.alive)
       {
         this.game.sound.play('dudeJump', 1, 0, false, false);
         this.player.jump();
@@ -612,26 +616,26 @@ Play.prototype = {
     // Removes the beer from the screen
     beer.kill();
     //  Add and update the score
-    // score += 1;
-    // scoreText.text = 'Score: ' + score;
+    this.score += 1;
+    this.scoreText.text = 'Score: ' + this.score;
   },
   collectKeg: function(player, keg) {
     // Removes the beer from the screen
     keg.kill();
     //  Add and update the score
-    // score += 5;
-    // scoreText.text = 'Score: ' + score;
+    this.score += 5;
+    this.scoreText.text = 'Score: ' + this.score;
   },
   collectWhiskey: function(player, whiskey) {
     // Removes the beer from the screen
     whiskey.kill();
     //  Add and update the score
-    // score += 5;
-    // scoreText.text = 'Score: ' + score;
+    this.score += 10;
+    this.scoreText.text = 'Score: ' + this.score;
   },
   // Generate Life
   generateLife: function(i){
-    var life = new Heart(this.game, i, 0);
+    var life = new Heart(this.game, i, 50);
     this.lives.add(life);
   },
   damageLife: function(){
