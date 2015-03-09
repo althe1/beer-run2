@@ -10,14 +10,14 @@ var Ground = function(game, x, y, frame) {
   this.body.velocity.x = -400;
   this.body.immovable = true;
   this.checkWorldBounds = true;
-  this.outOfBoundsDestroy = true;
+  this.outOfBoundsKill = true;
   this.body.allowGravity = false;
   
 };
 Ground.prototype = Object.create(Phaser.Sprite.prototype);
 Ground.prototype.constructor = Ground;
 Ground.prototype.update = function() {};
-//reset function for ground obj
+// reset function for ground obj
 Ground.prototype.reset = function(x, y) {
 
   this.game.physics.arcade.enable(this);

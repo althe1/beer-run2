@@ -8,6 +8,7 @@ var Cop = function(game, x, y, frame) {
   this.body.gravity.y = 620;
   this.body.velocity.x = -65;
   this.body.collideWorldBounds = false;
+  this.checkWorldBounds = true;
   this.outOfBoundsKill = true;
 
   this.animations.add('copleft', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);

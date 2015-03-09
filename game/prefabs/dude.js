@@ -29,7 +29,7 @@ Dude.prototype.update = function() {
 //lets the dude jump
 Dude.prototype.jump = function(){
   this.body.velocity.y = -550;
-}
+};
 
 module.exports = Dude;
 

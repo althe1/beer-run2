@@ -7,7 +7,7 @@ var Keg = function(game, x, y, frame) {
 
   this.enableBody = true;
   this.body.velocity.x = 0;
-  this.outofBoundsKill = true;
+  this.outOfBoundsKill = true;
   this.checkWorldBounds = true;
 };
 
