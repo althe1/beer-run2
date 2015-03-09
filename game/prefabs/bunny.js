@@ -10,6 +10,7 @@ var Bunny = function(game, x, y, frame) {
   this.body.gravity.y = 620;
   this.body.velocity.x = -50;
   this.body.collideWorldBounds = false;
+  this.checkWorldBounds = true;
   this.outOfBoundsKill = true;
 
   //bunny animation frames

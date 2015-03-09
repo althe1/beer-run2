@@ -30,7 +30,7 @@ PausePanel.prototype.show = function(){
 //hides the pause panel when unpaused
 PausePanel.prototype.unpause = function(){
   this.game.add.tween(this).to({alpha:0, y:150}, 800, Phaser.Easing.Exponential.Out, true, 0);
-  this.game.state.getCurrentState().unpauseGame();
+  this.game.state.getCurrentState().playGame();
 };
 
 module.exports = PausePanel;
