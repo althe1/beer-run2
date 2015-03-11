@@ -50,6 +50,7 @@ var Bunny = function(game, x, y, frame) {
   this.body.gravity.y = 620;
   this.body.velocity.x = -50;
   this.body.collideWorldBounds = false;
+  this.body.setSize(30, 32, 2, 0);
   this.checkWorldBounds = true;
   this.outOfBoundsKill = true;
 
@@ -78,6 +79,7 @@ var Cop = function(game, x, y, frame) {
   this.body.gravity.y = 620;
   this.body.velocity.x = -65;
   this.body.collideWorldBounds = false;
+  this.body.setSize(20, 60, 0, 5);
   this.checkWorldBounds = true;
   this.outOfBoundsKill = true;
 
@@ -110,6 +112,7 @@ var Dude = function(game, x, y, frame) {
   //dude properties
   this.body.gravity.y = 720;
   this.body.velocity.x = 400;
+  this.body.setSize(25, 60, 5, 0);
   this.body.collideWorldBounds = false;
   this.checkWorldBounds = true;
   this.outOfBoundsKill = true;
@@ -441,7 +444,7 @@ Play.prototype = {
     this.game.add.existing(this.initial_ground);
 
     //player 
-    this.player = new Dude(this.game, 500, 0)
+    this.player = new Dude(this.game, 500, 0);
     this.game.add.existing(this.player);
 
     //cops
@@ -495,7 +498,6 @@ Play.prototype = {
     this.initGame();
   },
   update: function() {
-      console.log(paused);
     //calls the checkcollisions function 
     this.checkCollisions();
 
@@ -507,6 +509,7 @@ Play.prototype = {
       if (this.touch.isDown && this.player.body.touching.down && this.player.alive || this.jumpKey.isDown && this.player.body.touching.down && this.player.alive)
       {
         this.game.sound.play('dudeJump', 1, 0, false, false);
+        console.log(this.player.hitArea);
         this.player.jump();
       }
       else if(!this.player.body.touching.down){
