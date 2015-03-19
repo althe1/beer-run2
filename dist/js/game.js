@@ -647,10 +647,11 @@ Play.prototype = {
   },
   bunnyDamageDude: function(player, bunnies) {
     if(player.body.touching.right) {
-      var hitDude = player.animations.play('run', 0, 2, false, true);
-      hitDude.play();
+      // var hitDude = player.animations.play('run', 8, false, true);
+      // hitDude.play();
       this.damageLife();
       console.log("bunnyDamageDude");
+      this.changeDeadChecker(this.player);
     }
     else if(player.body.touching.down && bunnies.body.touching.up) {
       bunnies.animations.play('boom', 3, false, true);
@@ -662,6 +663,7 @@ Play.prototype = {
   copDamageDude: function(player, cops) {
     if(player.body.touching.right) {
       this.damageLife();
+      this.changeDeadChecker(this.player);
     }
   },  
   bunnyKillDude: function(player, bunnies) {
@@ -690,7 +692,7 @@ Play.prototype = {
   },  
 
   changeDeadChecker: function(player, deadOrAlive) {
-    setTimeout(changeDead, 500);
+    setTimeout(changeDead, 1200);
 
     function changeDead() {
       deadchecker = true;
