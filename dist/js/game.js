@@ -494,7 +494,7 @@ Play.prototype = {
     this.initGame();
   },
   update: function() {
-      console.log(paused);
+      // console.log(paused);
     //calls the checkcollisions function 
     this.checkCollisions();
 
@@ -523,6 +523,13 @@ Play.prototype = {
         this.damageLife();
         this.damageLife();
         this.gameOver();
+      };
+
+      if(this.lives.children[0] === undefined) {
+        console.log("All lives gone");
+        this.gameOver();
+        var deadDude = this.player.animations.play('dead', 15, false, true);
+        deadDude.play();
       };
 
     };
@@ -559,8 +566,8 @@ Play.prototype = {
     this.game.physics.arcade.overlap(this.player, this.whiskeys, this.collectWhiskey, null, this);
 
     //lets player dies when cops and bunnies touch him
-    this.game.physics.arcade.overlap(this.player, this.bunnies, this.killDude, this.returnFalse, this);
-    this.game.physics.arcade.overlap(this.player, this.cops, this.killCop, this.returnFalse, this);
+    this.game.physics.arcade.overlap(this.player, this.bunnies, this.bunnyDamageDude, this.returnFalse, this);
+    this.game.physics.arcade.overlap(this.player, this.cops, this.copDamageDude, this.returnFalse, this);
   },
   //generates grounds with random y-value(height)
   generateGrounds: function() {  
@@ -638,8 +645,26 @@ Play.prototype = {
   damageLife: function(){
     this.lives.children.pop();
   },
-  //
-  killDude: function(player, bunnies) {
+  bunnyDamageDude: function(player, bunnies) {
+    if(player.body.touching.right) {
+      var hitDude = player.animations.play('run', 0, 2, false, true);
+      hitDude.play();
+      this.damageLife();
+      console.log("bunnyDamageDude");
+    }
+    else if(player.body.touching.down && bunnies.body.touching.up) {
+      bunnies.animations.play('boom', 3, false, true);
+      this.game.sound.play('explode', 1, 0, false, false);
+      this.changeDeadChecker(this.player, 'alive');
+    }
+  },
+
+  copDamageDude: function(player, cops) {
+    if(player.body.touching.right) {
+      this.damageLife();
+    }
+  },  
+  bunnyKillDude: function(player, bunnies) {
     if(player.body.touching.right) {
       deadchecker = false;
       var deadDude = player.animations.play('dead', 15, false, true);
@@ -654,7 +679,7 @@ Play.prototype = {
     }
   },
 
-  killCop: function(player, cops) {
+  copKillDude: function(player, cops) {
     if(player.body.touching.right) {
       deadchecker = false;
       var deadDude = player.animations.play('dead', 3, false, true);
