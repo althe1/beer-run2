@@ -36,12 +36,8 @@ Play.prototype = {
     this.game.add.existing(this.initial_ground);
 
     //player 
-<<<<<<< HEAD
-    this.player = new Dude(this.game, 500, 0);
-=======
     this.player = new Dude(this.game, 500, 0)
     this.player.jumpCount = 0;
->>>>>>> 77a74cdf151442a9754509082fe0049a239f7f91
     this.game.add.existing(this.player);
 
     //cops
@@ -122,11 +118,8 @@ Play.prototype = {
       }
       else{
         this.player.animations.play('run');
-<<<<<<< HEAD
         this.player.body.setSize(25, 60, 5, 0);
-=======
         this.player.jumpCount = 0;
->>>>>>> 77a74cdf151442a9754509082fe0049a239f7f91
       };
 
       if(!this.player.alive) {
