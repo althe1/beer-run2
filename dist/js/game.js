@@ -471,8 +471,8 @@ Play.prototype = {
     this.shift = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT = 16);
     this.touch = this.game.input.pointer1;
 
-    // Tells pahser to fire jumpCheck() ONCE per onDown event
-    this.jumpKey.onDown.add(this.jumpCheck, this);
+    // Tells phaser to fire doubleJump() ONCE per onDown event
+    this.jumpKey.onDown.add(this.doubleJump, this);
 
     // this.pauseKey = this.game.input.keyboard.addKey(32);
 
@@ -512,9 +512,7 @@ Play.prototype = {
 
       if (this.touch.isDown && this.player.body.touching.down && this.player.alive || this.jumpKey.isDown && this.player.body.touching.down && this.player.alive)
       {
-        this.game.sound.play('dudeJump', 1, 0, false, false);
-        this.player.jump();
-        this.player.body.setSize(15, 60, 5, 0);
+        this.doubleJump();
       }
       else if(!this.player.body.touching.down){
         this.player.animations.play('jump');
@@ -540,9 +538,11 @@ Play.prototype = {
 
   },
 
-  jumpCheck: function() {
+  doubleJump: function() {
     if (this.player.jumpCount < 2) {
       this.player.jump();
+      this.game.sound.play('dudeJump', 1, 0, false, false);
+      this.player.body.setSize(15, 60, 5, 0);
       this.player.jumpCount ++;
     };
   },
