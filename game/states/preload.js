@@ -1,4 +1,3 @@
-
 'use strict';
 function Preload() {
   this.asset = null;
@@ -35,6 +34,10 @@ Preload.prototype = {
     //sounds for the game
     this.load.audio('dudeJump', 'assets/audio/jump_07.wav');
     this.load.audio('explode', 'assets/audio/explosion.wav');
+    this.load.audio('collect_beer', 'assets/audio/collect_beer.wav');
+    this.load.audio('burp', 'assets/audio/burp.mp3');
+    this.load.audio('hiccup', 'assets/audio/hiccup.wav');
+    this.load.audio('scream', 'assets/audio/scream.ogg');
   },
   create: function() {
     this.asset.cropEnabled = false;

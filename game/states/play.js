@@ -84,8 +84,8 @@ Play.prototype = {
     this.lives = this.game.add.group();
 
     this.generateLife(14);
-    // this.generateLife(44);
-    // this.generateLife(88);
+    this.generateLife(60);
+    this.generateLife(106);
 
     this.initGame();
   },
@@ -161,25 +161,26 @@ Play.prototype = {
   //generates grounds with random y-value(height)
   generateGrounds: function() {  
     // console.log(this.game.world.height - 64);
-    var randomY = this.game.rnd.integerInRange(440, 520);
+    var randomY = this.game.rnd.integerInRange(450, 520);
     var randGround = this.groundGroup.getFirstExists(false);
       if(!randGround) {
         randGround = new Ground(this.game, 1200, randomY);
-        randGround.scale.setTo(2.5, 10);
+        randGround.scale.setTo(1.5, 10);
         this.groundGroup.add(randGround);
-      }
+      };
+      // randGround.reset(1200, randomY);
   },
   //generate cops 
   generateCops: function(){
     // console.log('beer');
-    var cop = new Cop(this.game, 1199, 300);
+    var cop = new Cop(this.game, 1200, 400);
     this.cops.add(cop);
   },
 
   //generate bunnies 
   generateBunnies: function(){
     // console.log('beer');
-    var bunny = new Bunny(this.game, 1199, 300);
+    var bunny = new Bunny(this.game, 1200, 420);
     this.bunnies.add(bunny);
   },
 
@@ -204,6 +205,7 @@ Play.prototype = {
   collectBeer: function(player, beer) {
     // Removes the beer from the screen
     beer.kill();
+    this.game.sound.play('collect_beer', 1, 0, false, false);
     //  Add and update the score
     this.score += 1;
     this.scoreText.text = 'Score: ' + this.score;
@@ -211,6 +213,7 @@ Play.prototype = {
   collectKeg: function(player, keg) {
     // Removes the beer from the screen
     keg.kill();
+    this.game.sound.play('burp', 1, 0, false, false);
     //  Add and update the score
     this.score += 5;
     this.scoreText.text = 'Score: ' + this.score;
@@ -218,6 +221,7 @@ Play.prototype = {
   collectWhiskey: function(player, whiskey) {
     // Removes the beer from the screen
     whiskey.kill();
+    this.game.sound.play('hiccup', 1, 0, false, false);
     //  Add and update the score
     this.score += 10;
     this.scoreText.text = 'Score: ' + this.score;
@@ -234,7 +238,7 @@ Play.prototype = {
   killDude: function(player, bunnies) {
     if(player.body.touching.right) {
       deadchecker = false;
-      var deadDude = player.animations.play('dead', 3, false, true);
+      var deadDude = player.animations.play('dead', 15, false, true);
       deadDude.play();
       deadDude.killOnComplete = true;
       this.changeDeadChecker(this.player, 'dead');
@@ -270,7 +274,7 @@ Play.prototype = {
   //when the game initializes start timers for the generators and play game
   initGame: function(){
     //creates grounds at intervals
-    this.groundGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 3, this.generateGrounds, this);
+    this.groundGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 2, this.generateGrounds, this);
     this.groundGenerator.timer.start();
 
     //creates beer at intervals
@@ -286,11 +290,11 @@ Play.prototype = {
     this.whiskeyGenerator.timer.start();
 
     //creates cops
-    this.copGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 4, this.generateCops, this);
+    this.copGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 4.5, this.generateCops, this);
     this.copGenerator.timer.start();
 
     //creates bunnies at intervals
-    this.bunnyGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 2.5, this.generateBunnies, this);
+    this.bunnyGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 2.7, this.generateBunnies, this);
     this.bunnyGenerator.timer.start();
 
     //runs the game
@@ -402,6 +406,7 @@ Play.prototype = {
   gameOver: function(){
     // Gamover
     this.gameover = true;
+    this.game.sound.play('scream', 1, 0, false, false);
     
     // Pause game
     this.pauseGame();
@@ -426,4 +431,3 @@ Play.prototype = {
 };
 
 module.exports = Play;
-
