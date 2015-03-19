@@ -37,6 +37,7 @@ Play.prototype = {
 
     //player 
     this.player = new Dude(this.game, 500, 0)
+    this.player.jumpCount = 0;
     this.game.add.existing(this.player);
 
     //cops
@@ -62,6 +63,10 @@ Play.prototype = {
     this.jumpKey = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     this.shift = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT = 16);
     this.touch = this.game.input.pointer1;
+
+    // Tells pahser to fire jumpCheck() ONCE per onDown event
+    this.jumpKey.onDown.add(this.jumpCheck, this);
+
     // this.pauseKey = this.game.input.keyboard.addKey(32);
 
     // makes spacebar not scroll down 
@@ -112,6 +117,7 @@ Play.prototype = {
       }
       else{
         this.player.animations.play('run');
+        this.player.jumpCount = 0;
       };
 
       if(!this.player.alive) {
@@ -123,6 +129,13 @@ Play.prototype = {
 
     };
 
+  },
+
+  jumpCheck: function() {
+    if (this.player.jumpCount < 2) {
+      this.player.jump();
+      this.player.jumpCount ++;
+    };
   },
 
   returnFalse: function() {
