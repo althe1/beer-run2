@@ -9,6 +9,7 @@ var Dude = function(game, x, y, frame) {
   //dude properties
   this.body.gravity.y = 720;
   this.body.velocity.x = 400;
+  this.body.setSize(25, 60, 5, 0);
   this.body.collideWorldBounds = false;
   this.checkWorldBounds = true;
   this.outOfBoundsKill = true;

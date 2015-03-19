@@ -8,6 +8,7 @@ var Cop = function(game, x, y, frame) {
   this.body.gravity.y = 620;
   this.body.velocity.x = -65;
   this.body.collideWorldBounds = false;
+  this.body.setSize(20, 60, 0, 5);
   this.checkWorldBounds = true;
   this.outOfBoundsKill = true;
 

@@ -95,7 +95,6 @@ Play.prototype = {
     this.initGame();
   },
   update: function() {
-      console.log(paused);
     //calls the checkcollisions function 
     this.checkCollisions();
 
@@ -103,21 +102,24 @@ Play.prototype = {
     if(!paused){
       //player speed
       this.player.body.velocity.x = 400;
-
+      //doublejump
       if (this.touch.isDown && this.player.body.touching.down && this.player.alive || this.jumpKey.isDown && this.player.body.touching.down && this.player.alive)
       {
         this.game.sound.play('dudeJump', 1, 0, false, false);
         this.player.jump();
+        this.player.body.setSize(15, 60, 5, 0);
       }
       else if(!this.player.body.touching.down){
         this.player.animations.play('jump');
         this.player.body.velocity.x = 0; 
+
       }
       else if(deadchecker == false){
       }
       else{
         this.player.animations.play('run');
-        this.player.jumpCount = 0;
+        this.player.body.setSize(25, 60, 5, 0);
+        this.player.jumpCount = 0; 
       };
 
       if(!this.player.alive) {
