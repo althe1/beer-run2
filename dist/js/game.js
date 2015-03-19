@@ -509,17 +509,19 @@ Play.prototype = {
       if (this.touch.isDown && this.player.body.touching.down && this.player.alive || this.jumpKey.isDown && this.player.body.touching.down && this.player.alive)
       {
         this.game.sound.play('dudeJump', 1, 0, false, false);
-        console.log(this.player.hitArea);
         this.player.jump();
+        this.player.body.setSize(15, 60, 5, 0);
       }
       else if(!this.player.body.touching.down){
         this.player.animations.play('jump');
         this.player.body.velocity.x = 0; 
+
       }
       else if(deadchecker == false){
       }
       else{
         this.player.animations.play('run');
+        this.player.body.setSize(25, 60, 5, 0);
       };
 
       if(!this.player.alive) {
