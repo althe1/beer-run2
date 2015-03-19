@@ -526,7 +526,7 @@ Play.prototype = {
       else{
         this.player.animations.play('run');
         this.player.body.setSize(25, 60, 5, 0);
-        this.player.jumpCount = 0;
+        this.player.jumpCount = 0; 
       };
 
       if(!this.player.alive) {
