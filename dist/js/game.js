@@ -473,7 +473,6 @@ Play.prototype = {
 
     // Tells phaser to fire doubleJump() ONCE per onDown event
     this.jumpKey.onDown.add(this.doubleJump, this);
-    this.touch.isDown.add(this.doubleJump, this);
     
     // this.pauseKey = this.game.input.keyboard.addKey(32);
 
