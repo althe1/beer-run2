@@ -5,8 +5,8 @@ var GameOverPanel = function(game, parent) {
 
   // Add panel
   this.panel = this.game.add.sprite(0, 0, 'gameOverPanel');
-  this.panel.width = 400;
-  this.panel.height = 80;
+  this.panel.width = 410;
+  this.panel.height = 90;
   this.add(this.panel);
 
   this.y = 50;

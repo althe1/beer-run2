@@ -18,12 +18,15 @@ Menu.prototype = {
     this.title = this.game.add.sprite(this.game.width/2, 250,'title');
     this.title.scale.setTo(1.2, 1.2);
     this.title.anchor.setTo(0.5, 1);
-
+    
     //makes the "Beer Run" go up and down in a loop
     this.game.add.tween(this.title).to({y:200}, 1000, Phaser.Easing.Linear.NONE, true, 0, 1000, true);
 
+    //Score from last game
+    this.scoreText = this.game.add.text(500, 250, 'High Score: ' + localStorage.getItem('score'), {fontSize: '32px', fill: '#000'});
+
     //creates the start button and once click runs the play state
-    this.startButton = this.game.add.button(this.game.width/2, 300, 'startButton', this.startClick, this);
+    this.startButton = this.game.add.button(this.game.width/2, 320, 'startButton', this.startClick, this);
     this.startButton.scale.setTo(2, 2);
     this.startButton.anchor.setTo(0.5,0.5);
   },

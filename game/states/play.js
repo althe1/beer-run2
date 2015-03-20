@@ -14,7 +14,6 @@ var paused = false;
 var deadchecker = true; 
 var scoreText;
 
-
 function Play() {}
 Play.prototype = {
   create: function() {
@@ -47,7 +46,9 @@ Play.prototype = {
     this.bunnies = this.game.add.group();
 
     //score
-    this.score = 0;
+    localStorage.setItem('score', '0');
+    console.log(localStorage.getItem('score'));
+
     this.scoreText = this.game.add.text(15, 15, 'Score: 0', {fontSize: '32px', fill: '#000'});
 
     //beer 
@@ -95,6 +96,7 @@ Play.prototype = {
     this.initGame();
   },
   update: function() {
+    
     //calls the checkcollisions function 
     this.checkCollisions();
 
@@ -229,24 +231,27 @@ Play.prototype = {
     beer.kill();
     this.game.sound.play('collect_beer', 1, 0, false, false);
     //  Add and update the score
-    this.score += 1;
-    this.scoreText.text = 'Score: ' + this.score;
+    var newScore = parseInt(localStorage.getItem("score")) + 5;
+    localStorage.setItem("score", newScore);
+    this.scoreText.text = 'Score: ' + localStorage.getItem("score");
   },
   collectKeg: function(player, keg) {
     // Removes the beer from the screen
     keg.kill();
     this.game.sound.play('burp', 1, 0, false, false);
     //  Add and update the score
-    this.score += 5;
-    this.scoreText.text = 'Score: ' + this.score;
+    var newScore = parseInt(localStorage.getItem("score")) + 5;
+    localStorage.setItem("score", newScore);
+    this.scoreText.text = 'Score: ' + localStorage.getItem("score");
   },
   collectWhiskey: function(player, whiskey) {
     // Removes the beer from the screen
     whiskey.kill();
     this.game.sound.play('hiccup', 1, 0, false, false);
     //  Add and update the score
-    this.score += 10;
-    this.scoreText.text = 'Score: ' + this.score;
+    var newScore = parseInt(localStorage.getItem("score")) + 10;
+    localStorage.setItem("score", newScore);
+    this.scoreText.text = 'Score: ' + localStorage.getItem("score");
   },
   // Generate Life
   generateLife: function(i){
@@ -258,11 +263,8 @@ Play.prototype = {
   },
   bunnyDamageDude: function(player, bunnies) {
     if(player.body.touching.right) {
-      // var hitDude = player.animations.play('run', 8, false, true);
-      // hitDude.play();
+      bunnies.body.x += -8;
       this.damageLife();
-      console.log("bunnyDamageDude");
-      this.changeDeadChecker(this.player);
     }
     else if(player.body.touching.down && bunnies.body.touching.up) {
       bunnies.animations.play('boom', 3, false, true);
@@ -273,32 +275,8 @@ Play.prototype = {
 
   copDamageDude: function(player, cops) {
     if(player.body.touching.right) {
+      cops.body.x += -8;
       this.damageLife();
-      this.changeDeadChecker(this.player);
-    }
-  },  
-  bunnyKillDude: function(player, bunnies) {
-    if(player.body.touching.right) {
-      deadchecker = false;
-      var deadDude = player.animations.play('dead', 15, false, true);
-      deadDude.play();
-      deadDude.killOnComplete = true;
-      this.changeDeadChecker(this.player, 'dead');
-    }
-    else {
-      bunnies.animations.play('boom', 3, false, true);
-      this.game.sound.play('explode', 1, 0, false, false);
-      this.changeDeadChecker(this.player, 'alive');
-    }
-  },
-
-  copKillDude: function(player, cops) {
-    if(player.body.touching.right) {
-      deadchecker = false;
-      var deadDude = player.animations.play('dead', 3, false, true);
-      deadDude.play();
-      deadDude.killOnComplete = true;
-      this.changeDeadChecker(this.player, 'dead');
     }
   },  
 
